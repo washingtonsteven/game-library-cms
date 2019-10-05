@@ -1,0 +1,16 @@
+type Game {
+  id: ID!
+  completed: Boolean
+  completed_date: Time
+  cover: String
+  created_date: Time
+  updated_date: Time
+  description: String
+  notes: String
+  owned: Boolean
+  platform: String
+  played: Boolean
+  rating: Int
+  release_date: Time
+  title: String!
+}
