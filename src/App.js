@@ -3,6 +3,7 @@ import logo from "./logo.svg";
 import "./App.css";
 // import FaunaTest from "./FaunaTest";
 import NetlifyFunctionTest from "./NetlifyFunctionTest";
+import SearchTest from "./SearchTest";
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <NetlifyFunctionTest />
+        <SearchTest />
       </header>
     </div>
   );
