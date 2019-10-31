@@ -13,4 +13,5 @@ type Game {
   rating: Int
   release_date: Time
   title: String!
+  idgb_id: String
 }

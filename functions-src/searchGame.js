@@ -25,8 +25,18 @@ exports.handler = function(event, context, callback) {
       Accept: "application/json",
       "user-key": process.env.IGDB_API_KEY
     },
-    data: `search "${search}"; fields name, alternative_names.*, cover.url, first_release_date, storyline, total_rating, websites.*;`
+    data: `search "${search}"; fields name, alternative_names.*, cover.*, first_release_date, storyline, total_rating, websites.*, platforms.name;`
   }).then(function(response) {
+    response.data = response.data.map(g => {
+      return {
+        ...g,
+        cover: g.cover
+          ? {
+              url: `https://images.igdb.com/igdb/image/upload/t_cover_big/${g.cover.image_id}.jpg`
+            }
+          : false
+      };
+    });
     return {
       statusCode: 200,
       headers: {

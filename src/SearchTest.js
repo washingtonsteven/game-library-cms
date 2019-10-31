@@ -1,7 +1,14 @@
 import React from "react";
 import axios from "axios";
+import GameCard from "./components/GameCard";
+import Container from "react-bootstrap/Container";
+import Button from "react-bootstrap/Button";
+import ButtonGroup from "react-bootstrap/ButtonGroup";
+import InputGroup from "react-bootstrap/InputGroup";
+import FormControl from "react-bootstrap/FormControl";
+import Form from "react-bootstrap/Form";
 
-export default () => {
+export default ({ onGameClicked }) => {
   const [search, setSearch] = React.useState("");
   const [results, setResults] = React.useState({});
 
@@ -13,25 +20,60 @@ export default () => {
       .catch(error => console.error(error));
   };
 
+  const reset = () => {
+    setSearch("");
+    setResults({});
+  };
+
+  const gameClicked = game => {
+    onGameClicked &&
+      typeof onGameClicked === "function" &&
+      (() => {
+        onGameClicked(game);
+        reset();
+      })();
+  };
+
   return (
-    <div className="search-container">
-      <form onSubmit={formSubmit}>
-        <label htmlFor="searchbox">
-          Search:
-          <input
-            type="text"
-            value={search}
-            id="searchbox"
-            onChange={e => setSearch(e.target.value)}
-          />
-        </label>
-        <input type="submit" value="Submit" />
-      </form>
-      {results && (
-        <pre>
-          <code>{JSON.stringify(results, null, 1)}</code>
-        </pre>
-      )}
-    </div>
+    <Container>
+      <div className="search-container">
+        <Form onSubmit={formSubmit}>
+          <InputGroup>
+            <FormControl
+              placeholder="Search Games"
+              aria-label="Game search query"
+              onChange={e => setSearch(e.target.value)}
+            />
+            <InputGroup.Append>
+              <ButtonGroup>
+                <Button type="submit">Submit</Button>
+                <Button onClick={reset} variant="secondary">
+                  Clear
+                </Button>
+              </ButtonGroup>
+            </InputGroup.Append>
+          </InputGroup>
+        </Form>
+        {results &&
+          results.data &&
+          results.data.response &&
+          results.data.response.map(game => (
+            <GameCard
+              key={game.id}
+              igdbGameData={game}
+              onConfirm={e => gameClicked(game)}
+              buttonLevel="info"
+              buttonText="Add?"
+            />
+          ))}
+        <small style={{ display: "none" }}>
+          {results && (
+            <pre>
+              <code>{JSON.stringify(results, null, 1)}</code>
+            </pre>
+          )}
+        </small>
+      </div>
+    </Container>
   );
 };
