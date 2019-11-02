@@ -35,7 +35,7 @@ export default ({ onGameClicked }) => {
   };
 
   return (
-    <Container>
+    <Container style={{ marginBottom: "20px" }}>
       <div className="search-container">
         <Form onSubmit={formSubmit}>
           <InputGroup>

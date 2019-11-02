@@ -1,7 +1,4 @@
 import React from "react";
-import logo from "./logo.svg";
-// import "./App.css";
-// import FaunaTest from "./FaunaTest";
 import NetlifyFunctionTest from "./NetlifyFunctionTest";
 import SearchTest from "./SearchTest";
 import Container from "react-bootstrap/Container";

@@ -3,6 +3,7 @@ import GameCard from "./components/GameCard";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
+import EditGame from "./components/EditGame";
 
 export default ({
   addGameResponse,
@@ -11,6 +12,16 @@ export default ({
   onDelete,
   onAdd
 }) => {
+  const [editingGame, setEditingGame] = React.useState(null);
+
+  const doEdit = () => {
+    if (!editingGame && fetchGamesResponse) {
+      console.log("editing: ", fetchGamesResponse.response[0].data);
+      setEditingGame(fetchGamesResponse.response[0].data);
+    } else {
+      setEditingGame(null);
+    }
+  };
   return (
     <Container
       className="netlify-function-test"
@@ -50,6 +61,10 @@ export default ({
             </pre>
           )}
         </div>
+      </Row>
+      <Row>
+        <Button onClick={doEdit}>Edit a Game</Button>
+        {editingGame && <EditGame game={editingGame} />}
       </Row>
     </Container>
   );
