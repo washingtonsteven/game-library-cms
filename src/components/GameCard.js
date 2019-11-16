@@ -3,6 +3,7 @@ import Card from "react-bootstrap/Card";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
 import Game from "../model/Game";
+import ConfirmButton from "./ConfirmButton";
 
 /*const getTestGame = () => ({
   completed: false,
@@ -20,47 +21,14 @@ import Game from "../model/Game";
   platform: "Nintendo Switch"
 }); */
 
-const ConfirmState = {
-  OFF: "OFF",
-  UNCONFIRMED: "UNCONFIRMED",
-  CONFIRMED: "CONFIRMED"
-};
-
-export default ({
-  gameData,
-  igdbGameData,
-  onConfirm,
-  bypassConfirm = false,
-  buttonLevel = "danger",
-  buttonText = "Delete?"
-}) => {
-  const [confirmState, setConfirmState] = React.useState(ConfirmState.OFF);
-
+export default ({ gameData, igdbGameData, buttons = [] }) => {
   const game = new Game(gameData);
   if (igdbGameData) {
     game.initWithIgdb(igdbGameData);
   }
 
-  const doConfirm = () => {
-    if (confirmState === ConfirmState.OFF) {
-      if (bypassConfirm) onConfirm();
-      else setConfirmState(ConfirmState.UNCONFIRMED);
-    }
-    if (confirmState === ConfirmState.UNCONFIRMED) {
-      setConfirmState(ConfirmState.CONFIRMED);
-      onConfirm && typeof onConfirm === "function" && onConfirm();
-    }
-  };
-
-  const cancelConfirm = () => {
-    setConfirmState(ConfirmState.OFF);
-  };
-
   return (
-    <Card
-      style={{ maxWidth: "18rem", cursor: "pointer" }}
-      onClick={() => (confirmState === ConfirmState.OFF ? doConfirm() : null)}
-    >
+    <Card style={{ maxWidth: "18rem", cursor: "pointer" }}>
       <Card.Img variant="top" src={game.cover} />
       <Card.Body>
         <Card.Title>{game.title}</Card.Title>
@@ -68,14 +36,31 @@ export default ({
           {game.description}
           <small>{game.displayReleaseDate()}</small>
         </Card.Text>
-        {confirmState !== ConfirmState.OFF && (
+        {buttons && buttons.length && (
           <ButtonGroup>
-            <Button variant="secondary" onClick={cancelConfirm}>
-              Cancel
-            </Button>
-            <Button variant={buttonLevel} onClick={doConfirm}>
-              {buttonText}
-            </Button>
+            {buttons.map(button =>
+              button.isConfirmButton ? (
+                <ConfirmButton
+                  key={button.key || button.label}
+                  onConfirm={() => button.onConfirm()}
+                  buttonProps={{ variant: button.variant }}
+                  confirmLabel={button.confirmLabel}
+                  confirmedLabel={button.confirmedLabel}
+                  cancelLabel={button.cancelLabel}
+                  confirmVariant={button.confirmVariant}
+                >
+                  {button.label}
+                </ConfirmButton>
+              ) : (
+                <Button
+                  key={button.key || button.label}
+                  onClick={button.onClick}
+                  variant={button.variant}
+                >
+                  {button.label}
+                </Button>
+              )
+            )}
           </ButtonGroup>
         )}
       </Card.Body>

@@ -1,6 +1,6 @@
 import React from "react";
-import NetlifyFunctionTest from "./NetlifyFunctionTest";
-import SearchTest from "./SearchTest";
+import GameList from "./components/GameList";
+import GameSearch from "./components/GameSearch";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import axios from "axios";
@@ -63,10 +63,14 @@ function App() {
       .catch(e => console.error(e));
   };
 
+  React.useEffect(() => {
+    doFetchGames();
+  }, []);
+
   return (
     <Container className="App">
       <Row>
-        <NetlifyFunctionTest
+        <GameList
           addGameResponse={addGameResponse}
           fetchGamesResponse={fetchGamesResponse}
           onDelete={deleteGame}
@@ -75,7 +79,7 @@ function App() {
         />
       </Row>
       <Row>
-        <SearchTest onGameClicked={addGame} />
+        <GameSearch onGameClicked={addGame} />
       </Row>
     </Container>
   );

@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import GameCard from "./components/GameCard";
+import GameCard from "./GameCard";
 import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
@@ -64,6 +64,21 @@ export default ({ onGameClicked }) => {
               onConfirm={e => gameClicked(game)}
               buttonLevel="info"
               buttonText="Add?"
+              buttons={[
+                {
+                  isConfirmButton: true,
+                  variant: "info",
+                  label: "Add?",
+                  confirmLabel: `Yes, add ${game.name}`,
+                  confirmedLabel: `Added ${game.name}!`,
+                  confirmVariant: "info",
+                  cancelLabel: `No, don't add`,
+                  onConfirm: () => {
+                    console.log("confirmed", game.name);
+                    gameClicked(game);
+                  }
+                }
+              ]}
             />
           ))}
         <small style={{ display: "none" }}>

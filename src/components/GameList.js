@@ -1,9 +1,9 @@
 import React from "react";
-import GameCard from "./components/GameCard";
+import GameCard from "./GameCard";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
-import EditGame from "./components/EditGame";
+import EditGame from "./EditGame";
 
 export default ({
   addGameResponse,
@@ -14,19 +14,17 @@ export default ({
 }) => {
   const [editingGame, setEditingGame] = React.useState(null);
 
-  const doEdit = () => {
+  const doEdit = game => {
     if (!editingGame && fetchGamesResponse) {
-      console.log("editing: ", fetchGamesResponse.response[0].data);
-      setEditingGame(fetchGamesResponse.response[0].data);
+      console.log("editing: ", game.data);
+      setEditingGame(game.data);
     } else {
       setEditingGame(null);
     }
   };
+
   return (
-    <Container
-      className="netlify-function-test"
-      style={{ marginBottom: "20px" }}
-    >
+    <Container className="game-list" style={{ marginBottom: "20px" }}>
       <Row>
         <div className="fetch col">
           <Button onClick={doFetch}>
@@ -46,6 +44,25 @@ export default ({
                   onConfirm={() => onDelete(game)}
                   buttonLevel="danger"
                   buttonText="Delete?"
+                  buttons={[
+                    {
+                      isConfirmButton: true,
+                      variant: "danger",
+                      label: "Delete?",
+                      confirmLabel: `Yes, delete ${game.data.title}`,
+                      cancelLabel: `No, don't delete`,
+                      onConfirm: () => {
+                        onDelete(game);
+                      }
+                    },
+                    {
+                      variant: "info",
+                      label: "Edit",
+                      onClick: () => {
+                        doEdit(game);
+                      }
+                    }
+                  ]}
                 />
               ))}
             </div>
