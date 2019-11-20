@@ -28,7 +28,7 @@ export default ({ gameData, igdbGameData, buttons = [] }) => {
   }
 
   return (
-    <Card style={{ maxWidth: "18rem", cursor: "pointer" }}>
+    <Card style={{ maxWidth: "18rem", cursor: "pointer", margin: "0 auto" }}>
       <Card.Img variant="top" src={game.cover} />
       <Card.Body>
         <Card.Title>{game.title}</Card.Title>

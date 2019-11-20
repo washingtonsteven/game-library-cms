@@ -2,87 +2,68 @@ import React from "react";
 import GameCard from "./GameCard";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
-import Button from "react-bootstrap/Button";
+import Col from "react-bootstrap/Col";
 import EditGame from "./EditGame";
 
-export default ({
-  addGameResponse,
-  fetchGamesResponse,
-  doFetch,
-  onDelete,
-  onAdd
-}) => {
+export default ({ fetchGamesResponse, onDelete, onUpdate }) => {
   const [editingGame, setEditingGame] = React.useState(null);
 
   const doEdit = game => {
     if (!editingGame && fetchGamesResponse) {
-      console.log("editing: ", game.data);
-      setEditingGame(game.data);
+      setEditingGame(game);
     } else {
       setEditingGame(null);
     }
   };
 
+  const doUpdate = (gameId, game) => {
+    if (onUpdate) {
+      doEdit(null);
+      onUpdate(gameId, game);
+    }
+  };
+
   return (
-    <Container className="game-list" style={{ marginBottom: "20px" }}>
+    <Container className="game-list">
       <Row>
-        <div className="fetch col">
-          <Button onClick={doFetch}>
-            Fetch All Games
-            {fetchGamesResponse.response &&
-              fetchGamesResponse.response.length &&
-              ` (${fetchGamesResponse.response.length})`}
-          </Button>
-          {fetchGamesResponse && fetchGamesResponse.response && (
-            <div
-              style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr" }}
-            >
-              {fetchGamesResponse.response.map(game => (
-                <GameCard
-                  key={game.ref["@ref"].id}
-                  gameData={game.data}
-                  onConfirm={() => onDelete(game)}
-                  buttonLevel="danger"
-                  buttonText="Delete?"
-                  buttons={[
-                    {
-                      isConfirmButton: true,
-                      variant: "danger",
-                      label: "Delete?",
-                      confirmLabel: `Yes, delete ${game.data.title}`,
-                      cancelLabel: `No, don't delete`,
-                      onConfirm: () => {
-                        onDelete(game);
-                      }
-                    },
-                    {
-                      variant: "info",
-                      label: "Edit",
-                      onClick: () => {
-                        doEdit(game);
-                      }
+        {fetchGamesResponse &&
+          fetchGamesResponse.response &&
+          fetchGamesResponse.response.map(game => (
+            <Col md={4} sm={6} xs={12} key={game.ref["@ref"].id}>
+              <GameCard
+                gameData={game.data}
+                onConfirm={() => onDelete(game)}
+                buttonLevel="danger"
+                buttonText="Delete?"
+                buttons={[
+                  {
+                    isConfirmButton: true,
+                    variant: "danger",
+                    label: "Delete?",
+                    confirmLabel: `Yes, delete ${game.data.title}`,
+                    cancelLabel: `No, don't delete`,
+                    onConfirm: () => {
+                      onDelete(game);
                     }
-                  ]}
-                />
-              ))}
-            </div>
-          )}
-        </div>
+                  },
+                  {
+                    variant: "info",
+                    label: "Edit",
+                    onClick: () => {
+                      doEdit(game);
+                    }
+                  }
+                ]}
+              />
+            </Col>
+          ))}
       </Row>
-      <Row style={{ display: "none" }}>
-        <div className="add col">
-          <button onClick={onAdd}>Add New Game</button>
-          {addGameResponse && (
-            <pre>
-              <code>{JSON.stringify(addGameResponse, null, 1)}</code>
-            </pre>
-          )}
-        </div>
-      </Row>
-      <Row>
-        <Button onClick={doEdit}>Edit a Game</Button>
-        {editingGame && <EditGame game={editingGame} />}
-      </Row>
+      <EditGame
+        game={editingGame}
+        active={editingGame !== null}
+        onCancel={() => doEdit(null)}
+        onUpdate={doUpdate}
+      />
     </Container>
   );
 };

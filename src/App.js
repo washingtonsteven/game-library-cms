@@ -1,44 +1,16 @@
 import React from "react";
 import GameList from "./components/GameList";
 import GameSearch from "./components/GameSearch";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
 import axios from "axios";
 import Game from "./model/Game";
-
-const randString = () =>
-  Array(4)
-    .fill()
-    .map(x => String.fromCharCode(Math.floor(Math.random() * 58) + 65))
-    .join("");
-
-const getTestGame = () => ({
-  completed: false,
-  completed_date: new Date().getTime(),
-  cover: "http://via.placeholder.com/500",
-  created_date: new Date().getTime(),
-  updated_date: new Date().getTime(),
-  description: "This is a description",
-  notes: "These are notes",
-  owned: true,
-  played: true,
-  rating: 100,
-  release_date: new Date(new Date().setFullYear(1988)).getTime(),
-  title: "Test Game " + randString(),
-  platform: "Nintendo Switch"
-});
+import Tabs from "react-bootstrap/Tabs";
+import Tab from "react-bootstrap/Tab";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 function App() {
-  const [addGameResponse, setAddGameResponse] = React.useState({});
   const [fetchGamesResponse, setFetchGamesResponse] = React.useState({});
-
-  const doAddRandomGame = () => {
-    axios
-      .post("/.netlify/functions/addGame", getTestGame())
-      .then(response => setAddGameResponse(response.data))
-      .then(() => doFetchGames())
-      .catch(e => console.error(e));
-  };
 
   const doFetchGames = () => {
     axios
@@ -63,25 +35,39 @@ function App() {
       .catch(e => console.error(e));
   };
 
+  const doUpdate = (gameId, game) => {
+    console.log("App updating game", { gameId, game });
+  };
+
   React.useEffect(() => {
     doFetchGames();
   }, []);
 
   return (
-    <Container className="App">
-      <Row>
-        <GameList
-          addGameResponse={addGameResponse}
-          fetchGamesResponse={fetchGamesResponse}
-          onDelete={deleteGame}
-          doFetch={doFetchGames}
-          onAdd={doAddRandomGame}
-        />
-      </Row>
-      <Row>
-        <GameSearch onGameClicked={addGame} />
-      </Row>
-    </Container>
+    <Tabs defaultActiveKey="list" className="App">
+      <Tab eventKey="list" title="Game List">
+        <Container>
+          <Row>
+            <Col>
+              <GameList
+                fetchGamesResponse={fetchGamesResponse}
+                onDelete={deleteGame}
+                onUpdate={doUpdate}
+              />
+            </Col>
+          </Row>
+        </Container>
+      </Tab>
+      <Tab eventKey="search" title="Game Search">
+        <Container>
+          <Row>
+            <Col>
+              <GameSearch onGameClicked={addGame} />
+            </Col>
+          </Row>
+        </Container>
+      </Tab>
+    </Tabs>
   );
 }
 

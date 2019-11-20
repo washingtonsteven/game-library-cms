@@ -2,6 +2,8 @@ import React from "react";
 import axios from "axios";
 import GameCard from "./GameCard";
 import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import InputGroup from "react-bootstrap/InputGroup";
@@ -36,50 +38,55 @@ export default ({ onGameClicked }) => {
 
   return (
     <Container style={{ marginBottom: "20px" }}>
-      <div className="search-container">
-        <Form onSubmit={formSubmit}>
-          <InputGroup>
-            <FormControl
-              placeholder="Search Games"
-              aria-label="Game search query"
-              onChange={e => setSearch(e.target.value)}
-            />
-            <InputGroup.Append>
-              <ButtonGroup>
-                <Button type="submit">Submit</Button>
-                <Button onClick={reset} variant="secondary">
-                  Clear
-                </Button>
-              </ButtonGroup>
-            </InputGroup.Append>
-          </InputGroup>
-        </Form>
+      <Row className="search-container">
+        <Col>
+          <Form onSubmit={formSubmit}>
+            <InputGroup>
+              <FormControl
+                placeholder="Search Games"
+                aria-label="Game search query"
+                onChange={e => setSearch(e.target.value)}
+              />
+              <InputGroup.Append>
+                <ButtonGroup>
+                  <Button type="submit">Submit</Button>
+                  <Button onClick={reset} variant="secondary">
+                    Clear
+                  </Button>
+                </ButtonGroup>
+              </InputGroup.Append>
+            </InputGroup>
+          </Form>
+        </Col>
+      </Row>
+      <Row>
         {results &&
           results.data &&
           results.data.response &&
           results.data.response.map(game => (
-            <GameCard
-              key={game.id}
-              igdbGameData={game}
-              onConfirm={e => gameClicked(game)}
-              buttonLevel="info"
-              buttonText="Add?"
-              buttons={[
-                {
-                  isConfirmButton: true,
-                  variant: "info",
-                  label: "Add?",
-                  confirmLabel: `Yes, add ${game.name}`,
-                  confirmedLabel: `Added ${game.name}!`,
-                  confirmVariant: "info",
-                  cancelLabel: `No, don't add`,
-                  onConfirm: () => {
-                    console.log("confirmed", game.name);
-                    gameClicked(game);
+            <Col key={game.id} md={4} sm={6} xs={12}>
+              <GameCard
+                igdbGameData={game}
+                onConfirm={e => gameClicked(game)}
+                buttonLevel="info"
+                buttonText="Add?"
+                buttons={[
+                  {
+                    isConfirmButton: true,
+                    variant: "info",
+                    label: "Add?",
+                    confirmLabel: `Yes, add ${game.name}`,
+                    confirmedLabel: `Added ${game.name}!`,
+                    confirmVariant: "info",
+                    cancelLabel: `No, don't add`,
+                    onConfirm: () => {
+                      console.log("confirmed", game.name);
+                      gameClicked(game);
+                    }
                   }
-                }
-              ]}
-            />
+                ]}
+              />
+            </Col>
           ))}
         <small style={{ display: "none" }}>
           {results && (
@@ -88,7 +95,7 @@ export default ({ onGameClicked }) => {
             </pre>
           )}
         </small>
-      </div>
+      </Row>
     </Container>
   );
 };

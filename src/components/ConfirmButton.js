@@ -45,7 +45,6 @@ export default ({
         onClick={initiateConfirm}
         disabled={confirmState === ConfirmState.CONFIRMED}
         ref={target}
-        style={{ border: "solid 1px black" }}
       >
         {confirmState !== ConfirmState.CONFIRMED
           ? children || label
