@@ -3,6 +3,7 @@ import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import StarRating from "./StarRating";
 
 /*const getTestGame = () => ({
   completed: false,
@@ -56,6 +57,13 @@ export default ({ game: rawGameData, onCancel, onUpdate }) => {
     onCancel && onCancel();
   };
 
+  const updateRating = rating => {
+    updateGame({
+      ...game,
+      rating
+    });
+  };
+
   return (
     <Modal show={game !== null} onHide={handleClose}>
       <Modal.Header closeButton>
@@ -68,7 +76,7 @@ export default ({ game: rawGameData, onCancel, onUpdate }) => {
               <Form.Group>
                 <Form.Switch
                   id="completed"
-                  label="Completed?"
+                  label="Finished?"
                   checked={game.completed}
                   onChange={doUpdateSwitch}
                 />
@@ -100,6 +108,11 @@ export default ({ game: rawGameData, onCancel, onUpdate }) => {
                   type="number"
                   value={game.rating}
                   onChange={doUpdate}
+                  style={{ display: "none" }}
+                />
+                <StarRating
+                  initialRating={game.rating}
+                  onUpdate={updateRating}
                 />
               </Form.Group>
               <Form.Group controlId="platform">

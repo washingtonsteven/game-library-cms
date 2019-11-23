@@ -37,6 +37,15 @@ function App() {
 
   const doUpdate = (gameId, game) => {
     console.log("App updating game", { gameId, game });
+    axios
+      .post("/.netlify/functions/updateGame", {
+        gameData: {
+          ...game
+        },
+        gameId
+      })
+      .then(response => doFetchGames())
+      .catch(e => console.error(e));
   };
 
   React.useEffect(() => {
