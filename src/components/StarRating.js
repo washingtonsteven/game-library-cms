@@ -29,12 +29,12 @@ const initialStyle = {
   justifyItems: "center"
 };
 
-export default ({ totalStars = 5, initialRating = 0, onUpdate }) => {
+const StarRating = ({ totalStars = 5, initialRating = 0, onUpdate }) => {
   const [currentRating, setCurrentRating] = React.useState(initialRating);
   const [style, setStyle] = React.useState(initialStyle);
+  const latestOnUpdate = React.useRef(onUpdate);
 
   React.useEffect(() => {
-    console.log("setting style");
     setStyle(s => ({
       ...s,
       gridTemplateColumns: `repeat(${totalStars}, 1fr)`
@@ -42,14 +42,12 @@ export default ({ totalStars = 5, initialRating = 0, onUpdate }) => {
   }, [totalStars]);
 
   React.useEffect(() => {
-    console.log("calling onUpdate");
-    console.log("update effect", onUpdate);
-    onUpdate && onUpdate(currentRating);
-  }, [currentRating]);
+    latestOnUpdate.current = onUpdate;
+  }, [onUpdate]);
 
-  const doUpdate = i => {
-    setCurrentRating(i + 1);
-  };
+  React.useEffect(() => {
+    latestOnUpdate.current && latestOnUpdate.current(currentRating);
+  }, [currentRating, latestOnUpdate]);
 
   return (
     <div style={style}>
@@ -58,10 +56,12 @@ export default ({ totalStars = 5, initialRating = 0, onUpdate }) => {
           key={i}
           active={i < currentRating}
           onClick={() => {
-            doUpdate(i);
+            setCurrentRating(i + 1); // 0-based
           }}
         />
       ))}
     </div>
   );
 };
+
+export default StarRating;

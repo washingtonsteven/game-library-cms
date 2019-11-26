@@ -5,7 +5,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import EditGame from "./EditGame";
 
-export default ({ fetchGamesResponse, onDelete, onUpdate }) => {
+const GameList = ({ fetchGamesResponse, onDelete, onUpdate }) => {
   const [editingGame, setEditingGame] = React.useState(null);
 
   const doEdit = game => {
@@ -67,3 +67,5 @@ export default ({ fetchGamesResponse, onDelete, onUpdate }) => {
     </Container>
   );
 };
+
+export default GameList;

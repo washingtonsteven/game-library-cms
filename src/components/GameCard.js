@@ -21,7 +21,7 @@ import ConfirmButton from "./ConfirmButton";
   platform: "Nintendo Switch"
 }); */
 
-export default ({ gameData, igdbGameData, buttons = [] }) => {
+const GameCard = ({ gameData, igdbGameData, buttons = [] }) => {
   const game = new Game(gameData);
   if (igdbGameData) {
     game.initWithIgdb(igdbGameData);
@@ -67,3 +67,5 @@ export default ({ gameData, igdbGameData, buttons = [] }) => {
     </Card>
   );
 };
+
+export default GameCard;
