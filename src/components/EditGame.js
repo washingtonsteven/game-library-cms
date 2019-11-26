@@ -21,7 +21,7 @@ import StarRating from "./StarRating";
   platform: "Nintendo Switch"
 }); */
 
-export default ({ game: rawGameData, onCancel, onUpdate }) => {
+const EditGame = ({ game: rawGameData, onCancel, onUpdate }) => {
   const [game, updateGame] = React.useState(null);
   const [gameId, setGameId] = React.useState("");
 
@@ -57,12 +57,15 @@ export default ({ game: rawGameData, onCancel, onUpdate }) => {
     onCancel && onCancel();
   };
 
-  const updateRating = rating => {
-    updateGame({
-      ...game,
-      rating
-    });
-  };
+  const updateRating = React.useCallback(
+    rating => {
+      updateGame({
+        ...game,
+        rating
+      });
+    },
+    [game]
+  );
 
   return (
     <Modal show={game !== null} onHide={handleClose}>
@@ -107,8 +110,8 @@ export default ({ game: rawGameData, onCancel, onUpdate }) => {
                 <Form.Control
                   type="number"
                   value={game.rating}
-                  onChange={doUpdate}
                   style={{ display: "none" }}
+                  readOnly
                 />
                 <StarRating
                   initialRating={game.rating}
@@ -149,3 +152,5 @@ export default ({ game: rawGameData, onCancel, onUpdate }) => {
     </Modal>
   );
 };
+
+export default EditGame;

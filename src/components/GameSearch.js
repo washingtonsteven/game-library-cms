@@ -10,7 +10,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
 import Form from "react-bootstrap/Form";
 
-export default ({ onGameClicked }) => {
+const GameSearch = ({ onGameClicked }) => {
   const [search, setSearch] = React.useState("");
   const [results, setResults] = React.useState({});
 
@@ -99,3 +99,5 @@ export default ({ onGameClicked }) => {
     </Container>
   );
 };
+
+export default GameSearch;

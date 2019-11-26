@@ -8,8 +8,9 @@ import Tab from "react-bootstrap/Tab";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Button from "react-bootstrap/Button";
 
-function App() {
+function App({ user = {}, logoutFn = () => {} }) {
   const [fetchGamesResponse, setFetchGamesResponse] = React.useState({});
 
   const doFetchGames = () => {
@@ -54,6 +55,20 @@ function App() {
 
   return (
     <Tabs defaultActiveKey="list" className="App">
+      <Tab eventKey="user" title="UserData">
+        <Container>
+          <Row>
+            <Col>
+              <Button onClick={logoutFn} variant="danger">
+                Logout
+              </Button>
+              <pre>
+                <code>{JSON.stringify(user, null, 1)}</code>
+              </pre>
+            </Col>
+          </Row>
+        </Container>
+      </Tab>
       <Tab eventKey="list" title="Game List">
         <Container>
           <Row>

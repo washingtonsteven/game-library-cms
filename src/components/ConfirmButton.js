@@ -9,7 +9,7 @@ const ConfirmState = {
   CONFIRMED: "CONFIRMED"
 };
 
-export default ({
+const ConfirmButton = ({
   onConfirm = () => {},
   children,
   label,
@@ -82,3 +82,5 @@ export default ({
     </>
   );
 };
+
+export default ConfirmButton;

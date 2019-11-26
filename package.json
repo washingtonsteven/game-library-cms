@@ -8,6 +8,7 @@
     "dotenv": "^8.1.0",
     "dotenv-webpack": "^1.7.0",
     "faunadb": "2.7",
+    "netlify-identity-widget": "^1.5.5",
     "react": "^16.10.1",
     "react-bootstrap": "^1.0.0-beta.14",
     "react-dom": "^16.10.1",
