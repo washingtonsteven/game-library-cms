@@ -29,7 +29,13 @@ const GameList = ({ fetchGamesResponse, onDelete, onUpdate }) => {
         {fetchGamesResponse &&
           fetchGamesResponse.response &&
           fetchGamesResponse.response.map(game => (
-            <Col md={4} sm={6} xs={12} key={game.ref["@ref"].id}>
+            <Col
+              md={4}
+              sm={6}
+              xs={12}
+              key={game.ref["@ref"].id}
+              className="mb-3"
+            >
               <GameCard
                 gameData={game.data}
                 onConfirm={() => onDelete(game)}

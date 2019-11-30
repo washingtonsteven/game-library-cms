@@ -9,6 +9,7 @@ import ButtonGroup from "react-bootstrap/ButtonGroup";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
 import Form from "react-bootstrap/Form";
+import CardDeck from "react-bootstrap/CardDeck";
 
 const GameSearch = ({ onGameClicked }) => {
   const [search, setSearch] = React.useState("");
@@ -64,28 +65,30 @@ const GameSearch = ({ onGameClicked }) => {
           results.data &&
           results.data.response &&
           results.data.response.map(game => (
-            <Col key={game.id} md={4} sm={6} xs={12}>
-              <GameCard
-                igdbGameData={game}
-                onConfirm={e => gameClicked(game)}
-                buttonLevel="info"
-                buttonText="Add?"
-                buttons={[
-                  {
-                    isConfirmButton: true,
-                    variant: "info",
-                    label: "Add?",
-                    confirmLabel: `Yes, add ${game.name}`,
-                    confirmedLabel: `Added ${game.name}!`,
-                    confirmVariant: "info",
-                    cancelLabel: `No, don't add`,
-                    onConfirm: () => {
-                      console.log("confirmed", game.name);
-                      gameClicked(game);
+            <Col key={game.id} md={4} sm={6} xs={12} className="mb-3">
+              <CardDeck>
+                <GameCard
+                  igdbGameData={game}
+                  onConfirm={e => gameClicked(game)}
+                  buttonLevel="info"
+                  buttonText="Add?"
+                  buttons={[
+                    {
+                      isConfirmButton: true,
+                      variant: "info",
+                      label: "Add?",
+                      confirmLabel: `Yes, add ${game.name}`,
+                      confirmedLabel: `Added ${game.name}!`,
+                      confirmVariant: "info",
+                      cancelLabel: `No, don't add`,
+                      onConfirm: () => {
+                        console.log("confirmed", game.name);
+                        gameClicked(game);
+                      }
                     }
-                  }
-                ]}
-              />
+                  ]}
+                />
+              </CardDeck>
             </Col>
           ))}
         <small style={{ display: "none" }}>

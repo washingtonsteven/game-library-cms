@@ -28,7 +28,7 @@ const GameCard = ({ gameData, igdbGameData, buttons = [] }) => {
   }
 
   return (
-    <Card style={{ maxWidth: "18rem", cursor: "pointer", margin: "0 auto" }}>
+    <Card style={{ maxWidth: "18rem" }}>
       <Card.Img variant="top" src={game.cover} />
       <Card.Body>
         <Card.Title>{game.title}</Card.Title>
@@ -36,7 +36,9 @@ const GameCard = ({ gameData, igdbGameData, buttons = [] }) => {
           {game.description}
           <small>{game.displayReleaseDate()}</small>
         </Card.Text>
-        {buttons && buttons.length && (
+      </Card.Body>
+      {buttons && buttons.length && (
+        <Card.Footer>
           <ButtonGroup>
             {buttons.map(button =>
               button.isConfirmButton ? (
@@ -62,8 +64,8 @@ const GameCard = ({ gameData, igdbGameData, buttons = [] }) => {
               )
             )}
           </ButtonGroup>
-        )}
-      </Card.Body>
+        </Card.Footer>
+      )}
     </Card>
   );
 };

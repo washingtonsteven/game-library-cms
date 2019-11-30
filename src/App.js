@@ -54,12 +54,12 @@ function App({ user = {}, logoutFn = () => {} }) {
   }, []);
 
   return (
-    <Tabs defaultActiveKey="list" className="App">
+    <Tabs defaultActiveKey="list" className="App my-3 px-3">
       <Tab eventKey="user" title="UserData">
-        <Container>
+        <Container className="p-2">
           <Row>
             <Col>
-              <Button onClick={logoutFn} variant="danger">
+              <Button onClick={logoutFn} variant="danger" className="mb-3">
                 Logout
               </Button>
               <pre>
@@ -70,7 +70,7 @@ function App({ user = {}, logoutFn = () => {} }) {
         </Container>
       </Tab>
       <Tab eventKey="list" title="Game List">
-        <Container>
+        <Container className="p-2">
           <Row>
             <Col>
               <GameList
@@ -83,7 +83,7 @@ function App({ user = {}, logoutFn = () => {} }) {
         </Container>
       </Tab>
       <Tab eventKey="search" title="Game Search">
-        <Container>
+        <Container className="p-2">
           <Row>
             <Col>
               <GameSearch onGameClicked={addGame} />

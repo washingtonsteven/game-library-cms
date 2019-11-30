@@ -41,7 +41,7 @@ const Identity = ({ children }) => {
     );
   }
   return (
-    <Container>
+    <Container className="p-3">
       <Row>
         <Col>
           <Button onClick={openLogin}>Login</Button>
