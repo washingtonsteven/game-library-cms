@@ -10,7 +10,7 @@ React Bootstrap for the UI because I can't design yet.
 
 Identity is in so only I can see it. Up next, some UI improvements.
 - Switch to List tab automatically after adding
-- Reverse sort so the most recently added is at the top
+- ~~Reverse sort so the most recently added is at the top~~
 - More info on cards
   - Star Rating, Platform icon, date added, nicer looking dates
   - actual grid display (i.e. consistent image heights)

@@ -48,7 +48,7 @@ const EditGame = ({ game: rawGameData, onCancel, onUpdate }) => {
   };
 
   const doUpdateSwitch = e => {
-    const updatedGame = { ...game };
+    const updatedGame = { ...game, updated_date: new Date().getTime() };
     updatedGame[e.target.id] = e.target.checked;
     updateGame(updatedGame);
   };

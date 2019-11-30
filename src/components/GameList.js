@@ -9,35 +9,36 @@ import FormControl from "react-bootstrap/FormControl";
 const GameList = ({ fetchGamesResponse, onDelete, onUpdate }) => {
   const [editingGame, setEditingGame] = React.useState(null);
   const [search, setSearch] = React.useState("");
-  const [gamesList, setGamesList] = React.useState([]);
   const [filteredGamesList, setFilteredGamesList] = React.useState([]);
 
   // Repopulate games if the response changes
-  React.useEffect(() => {
+  const gamesList = React.useCallback(() => {
     if (
       fetchGamesResponse &&
       fetchGamesResponse.response &&
       Array.isArray(fetchGamesResponse.response)
     ) {
-      setGamesList(fetchGamesResponse.response);
+      return fetchGamesResponse.response.sort((a, b) => {
+        return b.data.updated_date - a.data.updated_date;
+      });
     } else {
-      setGamesList([]);
+      return [];
     }
   }, [fetchGamesResponse]);
 
   // Filter games list based on search
   React.useEffect(() => {
     if (search.trim() === "") {
-      setFilteredGamesList(gamesList);
+      setFilteredGamesList(gamesList());
       return;
     }
 
-    const newGamesList = gamesList.filter(game => {
+    const newGamesList = gamesList().filter(game => {
       return game.data.title.toLowerCase().indexOf(search) >= 0;
     });
 
     setFilteredGamesList(newGamesList);
-  }, [search, gamesList]);
+  }, [search, gamesList, fetchGamesResponse]);
 
   const doEdit = game => {
     if (!editingGame && fetchGamesResponse) {
