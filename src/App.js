@@ -1,7 +1,6 @@
 import React from "react";
 import GameList from "./components/GameList";
 import GameSearch from "./components/GameSearch";
-import axios from "axios";
 import Game from "./model/Game";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";

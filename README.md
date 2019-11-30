@@ -15,7 +15,7 @@ Identity is in so only I can see it. Up next, some UI improvements.
   - Star Rating, Platform icon, date added, nicer looking dates
   - actual grid display (i.e. consistent image heights)
 - ~~Exclude/disable adding games from search results that are already there~~
-- Search/Filters on game list
+- ~~Search/Filters on game list~~
 
 ### 2019-10-05
 

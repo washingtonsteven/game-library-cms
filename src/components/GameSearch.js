@@ -10,10 +10,20 @@ import FormControl from "react-bootstrap/FormControl";
 import Form from "react-bootstrap/Form";
 import CardDeck from "react-bootstrap/CardDeck";
 import FunctionCall from "../functionCall";
+import Spinner from "react-bootstrap/Spinner";
+import Alert from "react-bootstrap/Alert";
+
+const spinnerStyle = {
+  width: "1rem",
+  height: "1rem",
+  borderWidth: "0.125em"
+};
 
 const GameSearch = ({ onGameClicked, fetchGamesResponse }) => {
   const [search, setSearch] = React.useState("");
-  const [results, setResults] = React.useState({});
+  const [results, setResults] = React.useState(null);
+  const [searchLoading, setSearchLoading] = React.useState(false);
+  const [previousSearch, setPreviousSearch] = React.useState("");
 
   const gamesList = React.useCallback(() => {
     if (
@@ -29,6 +39,8 @@ const GameSearch = ({ onGameClicked, fetchGamesResponse }) => {
 
   const formSubmit = e => {
     e.preventDefault();
+    setSearchLoading(true);
+    setPreviousSearch(search);
     FunctionCall.call({
       fetchConfig: {
         url: "/.netlify/functions/searchGame",
@@ -40,6 +52,7 @@ const GameSearch = ({ onGameClicked, fetchGamesResponse }) => {
     })
       .then(response => {
         setResults(response);
+        setSearchLoading(false);
       })
       .catch(error => console.error(error));
   };
@@ -72,7 +85,17 @@ const GameSearch = ({ onGameClicked, fetchGamesResponse }) => {
               />
               <InputGroup.Append>
                 <ButtonGroup>
-                  <Button type="submit">Submit</Button>
+                  <Button type="submit" disabled={searchLoading}>
+                    {searchLoading ? (
+                      <Spinner animation="border" style={spinnerStyle}>
+                        <span className="sr-only">
+                          Loading Search Results...
+                        </span>
+                      </Spinner>
+                    ) : (
+                      "Submit"
+                    )}
+                  </Button>
                   <Button onClick={reset} variant="secondary">
                     Clear
                   </Button>
@@ -82,6 +105,25 @@ const GameSearch = ({ onGameClicked, fetchGamesResponse }) => {
           </Form>
         </Col>
       </Row>
+      {!results && (
+        <Row>
+          <Col>
+            <Alert variant="primary">Enter a search query above</Alert>
+          </Col>
+        </Row>
+      )}
+      {results &&
+        results.data &&
+        results.data.response &&
+        !results.data.response.length && (
+          <Row>
+            <Col>
+              <Alert variant="warning">
+                Sorry, no results for "{previousSearch}"
+              </Alert>
+            </Col>
+          </Row>
+        )}
       <Row>
         {results &&
           results.data &&
