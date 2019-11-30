@@ -14,4 +14,5 @@ type Game {
   release_date: Time
   title: String!
   idgb_id: String
+  user_id: String
 }

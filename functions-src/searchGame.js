@@ -18,6 +18,19 @@ exports.handler = function(event, context, callback) {
     });
   }
 
+  const claims = context.clientContext && context.clientContext.user;
+  if (!claims) {
+    return callback(null, {
+      statusCode: 401,
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: "Unauthorized."
+      })
+    });
+  }
+
   return axios({
     method: "post",
     url: "https://api-v3.igdb.com/games",
@@ -43,7 +56,10 @@ exports.handler = function(event, context, callback) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        response: response.data
+        response: response.data,
+        userData: {
+          ...claims
+        }
       })
     };
   });

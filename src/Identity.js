@@ -4,6 +4,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
+import FunctionCall from "./functionCall";
 
 const Identity = ({ children }) => {
   const [authed, setAuthed] = React.useState(false);
@@ -31,6 +32,7 @@ const Identity = ({ children }) => {
   }, []);
 
   if (authed) {
+    FunctionCall.setNetlifyIdentity(NetlifyIdentityWidget);
     return (
       <div>
         {children(authed, () => {

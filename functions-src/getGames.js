@@ -6,8 +6,21 @@ const client = new faunadb.Client({
 });
 
 exports.handler = async function(event, context, callback) {
+  const claims = context.clientContext && context.clientContext.user;
+  if (!claims) {
+    return callback(null, {
+      statusCode: 401,
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: "Unauthorized."
+      })
+    });
+  }
+
   return client
-    .query(q.Paginate(q.Match(q.Ref("indexes/all_game"))))
+    .query(q.Paginate(q.Match(q.Index("game_by_user"), claims.sub)))
     .then(function(response) {
       const gameRefs = response.data;
 

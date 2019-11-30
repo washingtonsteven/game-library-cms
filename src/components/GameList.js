@@ -10,7 +10,7 @@ import Platform from "../model/Platform";
 const GameList = ({ fetchGamesResponse, onDelete, onUpdate }) => {
   const [editingGame, setEditingGame] = React.useState(null);
   const [search, setSearch] = React.useState("");
-  const [platformFilter, setPlatformFilter] = React.useState(null);
+  const [platformFilter, setPlatformFilter] = React.useState("all");
   const [filteredGamesList, setFilteredGamesList] = React.useState([]);
 
   // Repopulate games if the response changes

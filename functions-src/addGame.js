@@ -6,10 +6,44 @@ const client = new faunadb.Client({
 });
 
 exports.handler = async function(event, context, callback) {
-  const data = JSON.parse(event.body);
+  console.log(typeof event.body);
+  const data = (() => {
+    try {
+      return JSON.parse(event.body);
+    } catch (e) {
+      return null;
+    }
+  })();
+
   const gameData = {
     data: data
   };
+
+  if (!data) {
+    return callback(null, {
+      statusCode: 400,
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: "No data sent to add"
+      })
+    });
+  }
+
+  const claims = context.clientContext && context.clientContext.user;
+  if (!claims) {
+    return callback(null, {
+      statusCode: 401,
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: "Unauthorized."
+      })
+    });
+  }
+
   return client
     .query(q.Create(q.Collection("Game"), gameData))
     .then(response => {

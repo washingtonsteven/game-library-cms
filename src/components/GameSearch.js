@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import GameCard from "./GameCard";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -10,6 +9,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
 import Form from "react-bootstrap/Form";
 import CardDeck from "react-bootstrap/CardDeck";
+import FunctionCall from "../functionCall";
 
 const GameSearch = ({ onGameClicked, fetchGamesResponse }) => {
   const [search, setSearch] = React.useState("");
@@ -29,9 +29,18 @@ const GameSearch = ({ onGameClicked, fetchGamesResponse }) => {
 
   const formSubmit = e => {
     e.preventDefault();
-    axios
-      .get("/.netlify/functions/searchGame", { params: { s: search } })
-      .then(response => setResults(response))
+    FunctionCall.call({
+      fetchConfig: {
+        url: "/.netlify/functions/searchGame",
+        method: "get",
+        params: {
+          s: search
+        }
+      }
+    })
+      .then(response => {
+        setResults(response);
+      })
       .catch(error => console.error(error));
   };
 

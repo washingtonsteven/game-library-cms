@@ -9,20 +9,33 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
+import Alert from "react-bootstrap/Alert";
+import functionCall from "./functionCall";
 
-function App({ user = {}, logoutFn = () => {} }) {
+function App({ user, logoutFn = () => {} }) {
   const [fetchGamesResponse, setFetchGamesResponse] = React.useState({});
 
   const doFetchGames = () => {
-    axios
-      .get("/.netlify/functions/getGames")
+    functionCall
+      .call({
+        fetchConfig: {
+          url: "/.netlify/functions/getGames",
+          method: "get"
+        }
+      })
       .then(response => setFetchGamesResponse(response.data))
       .catch(e => console.error(e));
   };
 
   const deleteGame = game => {
-    axios
-      .post("/.netlify/functions/deleteGame", game)
+    functionCall
+      .call({
+        fetchConfig: {
+          url: "/.netlify/functions/deleteGame",
+          method: "post",
+          data: game
+        }
+      })
       .then(() => doFetchGames())
       .catch(e => console.error(e));
   };
@@ -30,20 +43,33 @@ function App({ user = {}, logoutFn = () => {} }) {
   const addGame = game => {
     const formattedGame = new Game();
     formattedGame.initWithIgdb(game);
-    axios
-      .post("/.netlify/functions/addGame", formattedGame.getData())
-      .then(response => doFetchGames())
+    functionCall
+      .call({
+        fetchConfig: {
+          url: "/.netlify/functions/addGame",
+          method: "post",
+          data: {
+            ...formattedGame.getData(),
+            user_id: user.id
+          }
+        }
+      })
+      .then(() => doFetchGames())
       .catch(e => console.error(e));
   };
 
   const doUpdate = (gameId, game) => {
     console.log("App updating game", { gameId, game });
-    axios
-      .post("/.netlify/functions/updateGame", {
-        gameData: {
-          ...game
-        },
-        gameId
+    functionCall
+      .call({
+        fetchConfig: {
+          url: "/.netlify/functions/updateGame",
+          method: "post",
+          data: {
+            gameData: { ...game },
+            gameId
+          }
+        }
       })
       .then(response => doFetchGames())
       .catch(e => console.error(e));
@@ -52,6 +78,18 @@ function App({ user = {}, logoutFn = () => {} }) {
   React.useEffect(() => {
     doFetchGames();
   }, []);
+
+  if (!user) {
+    return (
+      <Container>
+        <Row>
+          <Col>
+            <Alert variant="danger">Uh oh. You didn't log in right.</Alert>
+          </Col>
+        </Row>
+      </Container>
+    );
+  }
 
   return (
     <Tabs defaultActiveKey="list" className="App my-3 px-3">
@@ -63,7 +101,7 @@ function App({ user = {}, logoutFn = () => {} }) {
                 Logout
               </Button>
               <pre>
-                <code>{JSON.stringify(user, null, 1)}</code>
+                <code>{JSON.stringify(user || {}, null, 1)}</code>
               </pre>
             </Col>
           </Row>

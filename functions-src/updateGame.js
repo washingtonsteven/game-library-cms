@@ -12,6 +12,19 @@ exports.handler = async function(event, context, callback) {
   };
   const gameId = data.gameId;
 
+  const claims = context.clientContext && context.clientContext.user;
+  if (!claims) {
+    return callback(null, {
+      statusCode: 401,
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: "Unauthorized."
+      })
+    });
+  }
+
   return client
     .query(q.Update(q.Ref(q.Collection("Game"), gameId), gameData))
     .then(response => {

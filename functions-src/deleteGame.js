@@ -8,6 +8,20 @@ const client = new faunadb.Client({
 exports.handler = async function(event, context, callback) {
   const data = JSON.parse(event.body);
   const gameId = data.ref["@ref"].id;
+
+  const claims = context.clientContext && context.clientContext.user;
+  if (!claims) {
+    return callback(null, {
+      statusCode: 401,
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: "Unauthorized."
+      })
+    });
+  }
+
   return client
     .query(q.Delete(q.Ref(q.Collection("Game"), gameId)))
     .then(response => {
