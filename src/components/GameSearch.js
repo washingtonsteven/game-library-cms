@@ -11,9 +11,21 @@ import FormControl from "react-bootstrap/FormControl";
 import Form from "react-bootstrap/Form";
 import CardDeck from "react-bootstrap/CardDeck";
 
-const GameSearch = ({ onGameClicked }) => {
+const GameSearch = ({ onGameClicked, fetchGamesResponse }) => {
   const [search, setSearch] = React.useState("");
   const [results, setResults] = React.useState({});
+
+  const gamesList = React.useCallback(() => {
+    if (
+      fetchGamesResponse &&
+      fetchGamesResponse.response &&
+      Array.isArray(fetchGamesResponse.response)
+    ) {
+      return fetchGamesResponse.response;
+    } else {
+      return [];
+    }
+  }, [fetchGamesResponse]);
 
   const formSubmit = e => {
     e.preventDefault();
@@ -39,7 +51,7 @@ const GameSearch = ({ onGameClicked }) => {
 
   return (
     <Container style={{ marginBottom: "20px" }}>
-      <Row className="search-container">
+      <Row className="search-container mb-3">
         <Col>
           <Form onSubmit={formSubmit}>
             <InputGroup>
@@ -47,6 +59,7 @@ const GameSearch = ({ onGameClicked }) => {
                 placeholder="Search Games"
                 aria-label="Game search query"
                 onChange={e => setSearch(e.target.value)}
+                value={search}
               />
               <InputGroup.Append>
                 <ButtonGroup>
@@ -64,33 +77,41 @@ const GameSearch = ({ onGameClicked }) => {
         {results &&
           results.data &&
           results.data.response &&
-          results.data.response.map(game => (
-            <Col key={game.id} md={4} sm={6} xs={12} className="mb-3">
-              <CardDeck>
-                <GameCard
-                  igdbGameData={game}
-                  onConfirm={e => gameClicked(game)}
-                  buttonLevel="info"
-                  buttonText="Add?"
-                  buttons={[
-                    {
-                      isConfirmButton: true,
-                      variant: "info",
-                      label: "Add?",
-                      confirmLabel: `Yes, add ${game.name}`,
-                      confirmedLabel: `Added ${game.name}!`,
-                      confirmVariant: "info",
-                      cancelLabel: `No, don't add`,
-                      onConfirm: () => {
-                        console.log("confirmed", game.name);
-                        gameClicked(game);
+          results.data.response.map(game => {
+            const alreadyAdded = Boolean(
+              gamesList().find(g => parseInt(g.data.igdb_id) === game.id)
+            );
+            return (
+              <Col key={game.id} md={4} sm={6} xs={12} className="mb-3">
+                <CardDeck>
+                  <GameCard
+                    igdbGameData={game}
+                    onConfirm={e => gameClicked(game)}
+                    buttonLevel="info"
+                    buttonText="Add?"
+                    buttons={[
+                      {
+                        isConfirmButton: true,
+                        variant: "info",
+                        label: alreadyAdded ? "Already Added" : "Add?",
+                        confirmLabel: `Yes, add ${game.name}`,
+                        confirmedLabel: `Added ${game.name}!`,
+                        confirmVariant: "info",
+                        cancelLabel: `No, don't add`,
+                        onConfirm: () => {
+                          console.log("confirmed", game.name);
+                          gameClicked(game);
+                        },
+                        buttonProps: {
+                          disabled: alreadyAdded
+                        }
                       }
-                    }
-                  ]}
-                />
-              </CardDeck>
-            </Col>
-          ))}
+                    ]}
+                  />
+                </CardDeck>
+              </Col>
+            );
+          })}
         <small style={{ display: "none" }}>
           {results && (
             <pre>

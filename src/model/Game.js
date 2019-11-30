@@ -11,7 +11,7 @@ class Game {
           ? igdbGameResults.cover.url
           : this.cover;
       this.release_date = new Date(1000 * igdbGameResults.first_release_date);
-      this.idgb_id = igdbGameResults.id + "";
+      this.igdb_id = igdbGameResults.id + "";
     }
   }
 

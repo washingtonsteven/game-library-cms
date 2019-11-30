@@ -41,10 +41,10 @@ const ConfirmButton = ({
   return (
     <>
       <Button
-        {...buttonProps}
         onClick={initiateConfirm}
         disabled={confirmState === ConfirmState.CONFIRMED}
         ref={target}
+        {...buttonProps}
       >
         {confirmState !== ConfirmState.CONFIRMED
           ? children || label

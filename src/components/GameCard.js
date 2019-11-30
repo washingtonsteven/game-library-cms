@@ -45,7 +45,10 @@ const GameCard = ({ gameData, igdbGameData, buttons = [] }) => {
                 <ConfirmButton
                   key={button.key || button.label}
                   onConfirm={() => button.onConfirm()}
-                  buttonProps={{ variant: button.variant }}
+                  buttonProps={{
+                    variant: button.variant,
+                    ...(button.buttonProps || {})
+                  }}
                   confirmLabel={button.confirmLabel}
                   confirmedLabel={button.confirmedLabel}
                   cancelLabel={button.cancelLabel}
@@ -58,6 +61,7 @@ const GameCard = ({ gameData, igdbGameData, buttons = [] }) => {
                   key={button.key || button.label}
                   onClick={button.onClick}
                   variant={button.variant}
+                  {...(button.buttonProps || {})}
                 >
                   {button.label}
                 </Button>

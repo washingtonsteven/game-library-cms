@@ -86,7 +86,10 @@ function App({ user = {}, logoutFn = () => {} }) {
         <Container className="p-2">
           <Row>
             <Col>
-              <GameSearch onGameClicked={addGame} />
+              <GameSearch
+                onGameClicked={addGame}
+                fetchGamesResponse={fetchGamesResponse}
+              />
             </Col>
           </Row>
         </Container>
