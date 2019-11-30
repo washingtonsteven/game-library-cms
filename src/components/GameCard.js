@@ -28,10 +28,10 @@ const GameCard = ({ gameData, igdbGameData, buttons = [] }) => {
   }
 
   return (
-    <Card style={{ maxWidth: "18rem" }}>
+    <Card>
+      <Card.Header>{game.title}</Card.Header>
       <Card.Img variant="top" src={game.cover} />
       <Card.Body>
-        <Card.Title>{game.title}</Card.Title>
         <Card.Text>
           {game.description}
           <small>{game.displayReleaseDate()}</small>
