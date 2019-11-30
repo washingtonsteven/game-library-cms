@@ -4,6 +4,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import StarRating from "./StarRating";
+import Platform from "../model/Platform";
 
 /*const getTestGame = () => ({
   completed: false,
@@ -126,18 +127,13 @@ const EditGame = ({ game: rawGameData, onCancel, onUpdate }) => {
                   onChange={doUpdate}
                 >
                   <option>None Set</option>
-                  <option value="computer">PC/Mac</option>
-                  <option value="switch">Nintendo Switch</option>
-                  <option value="ps4">Playstation 4</option>
-                  <option value="3ds">Nintendo 3DS</option>
-                  <option value="ds">Nintendo DS</option>
-                  <option value="wiiu">Nintendo WiiU</option>
-                  <option value="wii">Nintendo Wii</option>
-                  <option value="x360">Xbox 360</option>
-                  <option value="ps2">Playstation 2</option>
-                  <option value="gcn">Nintendo Gamecube</option>
-                  <option value="psp">Playstation Portable</option>
-                  <option value="psv">Playstation Vita</option>
+                  {Object.entries(Platform.PLATFORM_MAP).map(
+                    ([platform, name]) => (
+                      <option value={platform} key={platform}>
+                        {name}
+                      </option>
+                    )
+                  )}
                 </Form.Control>
               </Form.Group>
             </Form>

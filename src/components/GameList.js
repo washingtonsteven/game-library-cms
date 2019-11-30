@@ -4,11 +4,13 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import EditGame from "./EditGame";
-import FormControl from "react-bootstrap/FormControl";
+import Form from "react-bootstrap/Form";
+import Platform from "../model/Platform";
 
 const GameList = ({ fetchGamesResponse, onDelete, onUpdate }) => {
   const [editingGame, setEditingGame] = React.useState(null);
   const [search, setSearch] = React.useState("");
+  const [platformFilter, setPlatformFilter] = React.useState(null);
   const [filteredGamesList, setFilteredGamesList] = React.useState([]);
 
   // Repopulate games if the response changes
@@ -26,19 +28,30 @@ const GameList = ({ fetchGamesResponse, onDelete, onUpdate }) => {
     }
   }, [fetchGamesResponse]);
 
+  const platforms = React.useCallback(() => {
+    return gamesList()
+      .map(g => g.data.platform)
+      .filter(p => p)
+      .filter((p, i, a) => a.indexOf(p) === i);
+  }, [gamesList]);
+
   // Filter games list based on search
   React.useEffect(() => {
-    if (search.trim() === "") {
-      setFilteredGamesList(gamesList());
-      return;
+    let newGamesList = gamesList();
+    if (search.trim() !== "") {
+      newGamesList = gamesList().filter(game => {
+        return game.data.title.toLowerCase().indexOf(search) >= 0;
+      });
     }
 
-    const newGamesList = gamesList().filter(game => {
-      return game.data.title.toLowerCase().indexOf(search) >= 0;
-    });
+    if (platformFilter && platformFilter !== "all") {
+      newGamesList = newGamesList.filter(game => {
+        return game.data.platform === platformFilter;
+      });
+    }
 
     setFilteredGamesList(newGamesList);
-  }, [search, gamesList, fetchGamesResponse]);
+  }, [search, gamesList, fetchGamesResponse, platformFilter]);
 
   const doEdit = game => {
     if (!editingGame && fetchGamesResponse) {
@@ -59,11 +72,28 @@ const GameList = ({ fetchGamesResponse, onDelete, onUpdate }) => {
     <Container className="game-list">
       <Row className="mb-3">
         <Col>
-          <FormControl
+          <Form.Control
             placeholder="Search Games"
             aria-label="Game search query"
             onChange={e => setSearch(e.target.value)}
+            value={search}
           />
+        </Col>
+        <Col>
+          <Form.Group controlId="platform">
+            <Form.Control
+              as="select"
+              value={platformFilter}
+              onChange={e => setPlatformFilter(e.target.value)}
+            >
+              <option value="all">All Platforms</option>
+              {platforms().map(platform => (
+                <option value={platform} key={platform}>
+                  {Platform.getPlatformName(platform)}
+                </option>
+              ))}
+            </Form.Control>
+          </Form.Group>
         </Col>
       </Row>
       <Row>
