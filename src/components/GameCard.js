@@ -4,6 +4,9 @@ import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
 import Game from "../model/Game";
 import ConfirmButton from "./ConfirmButton";
+import CollapsibleText from "./CollapsibleText";
+import Platform from "../model/Platform";
+import StarRating from "./StarRating";
 
 /*const getTestGame = () => ({
   completed: false,
@@ -29,12 +32,27 @@ const GameCard = ({ gameData, igdbGameData, buttons = [] }) => {
 
   return (
     <Card>
-      <Card.Header>{game.title}</Card.Header>
+      <Card.Header>
+        {game.title}{" "}
+        <small className="text-muted">({game.displayReleaseDate()})</small>
+      </Card.Header>
       <Card.Img variant="top" src={game.cover} />
-      <Card.Body>
+      <Card.Body style={{ padding: 0 }}>
+        <Card.Subtitle className="p-3 mt-0">
+          {game.platform
+            ? Platform.getPlatformName(game.platform)
+            : "- No Platform Selected -"}
+        </Card.Subtitle>
         <Card.Text>
-          {game.description}
-          <small>{game.displayReleaseDate()}</small>
+          {game.notes && (
+            <div className="p-3 mb-0 bg-warning">{game.notes}</div>
+          )}
+          <div className="p-3">
+            <StarRating initialRating={game.rating} disabled />
+          </div>
+          <small className="p-3" style={{ display: "block" }}>
+            <CollapsibleText as="small">{game.description}</CollapsibleText>
+          </small>
         </Card.Text>
       </Card.Body>
       {buttons && buttons.length && (

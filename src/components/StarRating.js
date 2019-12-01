@@ -4,10 +4,11 @@ const Star = ({
   active,
   activeColor = "#ffd700",
   inactiveColor = "#ccc",
-  onClick = () => {}
+  onClick = () => {},
+  style = {}
 }) => {
   return (
-    <div onClick={onClick}>
+    <div onClick={onClick} style={style}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"
@@ -29,7 +30,12 @@ const initialStyle = {
   justifyItems: "center"
 };
 
-const StarRating = ({ totalStars = 5, initialRating = 0, onUpdate }) => {
+const StarRating = ({
+  totalStars = 5,
+  initialRating = 0,
+  onUpdate,
+  disabled
+}) => {
   const [currentRating, setCurrentRating] = React.useState(initialRating);
   const [style, setStyle] = React.useState(initialStyle);
   const latestOnUpdate = React.useRef(onUpdate);
@@ -56,7 +62,11 @@ const StarRating = ({ totalStars = 5, initialRating = 0, onUpdate }) => {
           key={i}
           active={i < currentRating}
           onClick={() => {
+            if (disabled) return;
             setCurrentRating(i + 1); // 0-based
+          }}
+          style={{
+            cursor: disabled ? "inherit" : "pointer"
           }}
         />
       ))}

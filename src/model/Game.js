@@ -12,6 +12,7 @@ class Game {
           : this.cover;
       this.release_date = new Date(1000 * igdbGameResults.first_release_date);
       this.igdb_id = igdbGameResults.id + "";
+      this.description = igdbGameResults.description;
     }
   }
 
@@ -61,16 +62,22 @@ class Game {
   }
 
   displayReleaseDate() {
-    return this.displayDate("release");
+    return this.getDate("release").getFullYear();
+  }
+
+  getDate(key) {
+    const date = this[`${key}_date`];
+    if (date instanceof Date) {
+      return date;
+    } else if (!isNaN(date)) {
+      return new Date(date);
+    }
+    return null;
   }
 
   displayDate(key) {
-    const date = this[`${key}_date`];
-    if (date instanceof Date) {
-      return date.toUTCString();
-    } else if (!isNaN(date)) {
-      return new Date(date).toUTCString();
-    }
+    const date = this.getDate(key);
+    if (date) return date.toUTCString();
     return "Invalid Date.";
   }
 
