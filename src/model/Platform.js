@@ -11,7 +11,8 @@ class Platform {
     ps2: "Playstation 2",
     gcn: "Nintendo Gamecube",
     psp: "Playstation Portable",
-    psv: "Playstation Vita"
+    psv: "Playstation Vita",
+    vr: "VR",
   };
 
   getPlatformName(platform) {
